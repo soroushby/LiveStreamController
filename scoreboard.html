@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Glacial+Indifference"
+    />
+    <style>
+      /* Your CSS styles here */
+      body {
+        font-family: "Glacial Indifference", sans-serif;
+        /* Additional CSS styles for your font */
+      }
+    </style>
+
+    <style>
+      /* Reset some default styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Apply a background color to the entire page */
+      body {
+        background-color: #f0f0f0;
+      }
+
+      /* Style the live stream bar container */
+      .live-stream-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly; /* Changed to space-between */
+        background-color: #ffffff;
+        height: 80px;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        animation: fadeIn 2s ease;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      /* Style team logos */
+      .team-logo img {
+        width: 60px;
+        height: 60px;
+        /* border-radius: 50%;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); */
+      }
+
+      /* Style score and timer containers */
+      .score,
+      .timer {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        margin: 0 5px; /* Adjusted spacing */
+      }
+
+      /* Style score and timer buttons */
+      .score button,
+      .timer button,
+      .timer-control-button {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        margin: 0 5px; /* Adjusted spacing */
+        transition: background-color 0.2s ease;
+      }
+
+      /* Style score and timer value */
+      .score-value,
+      .timer-value {
+        margin: 0 10px;
+        font-size: 28px;
+      }
+
+      /* Style timer controls container */
+      .timer-controls {
+        display: flex;
+        align-items: center;
+      }
+
+      /* Style media container */
+      .media-container {
+        width: 120px;
+        height: 60px;
+        background-color: #333;
+        overflow: hidden;
+        border-radius: 5px;
+      }
+
+      /* Style media content (GIF or video) */
+      .media-content {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Style start and stop buttons */
+      .start,
+      .stop {
+        background-color: #4caf50;
+        font-size: 24px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        margin: 0 10px; /* Adjusted spacing */
+        transition: background-color 0.2s ease;
+      }
+
+      /* Hover effect for buttons */
+      .start:hover,
+      .stop:hover,
+      .score button:hover,
+      .timer button:hover,
+      .timer-control-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Keyframes for fade-in animation */
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Style for date and time */
+      .date-time {
+        font-size: 18px;
+        margin-right: 20px;
+      }
+
+      .soroush {
+        display: flex;
+
+        width: 100%;
+      }
+
+      .increase1 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+      .decrease1 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+
+      .increase2 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+      .decrease2 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="soroush">
+      <button class="decrease1">-</button>
+      <button class="increase1">+</button>
+      <button class="start">Start</button>
+      <button class="stop">Stop</button>
+      <button class="timer-control-button decrease-time">-</button>
+      <button class="timer-control-button increase-time">+</button>
+      <button class="decrease2">-</button>
+      <button class="increase2">+</button>
+    </div>
+
+    <div class="live-stream-bar">
+      <div class="team-logo">
+        <!-- Team 1 Logo -->
+        <img
+          src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png "
+          alt="Team 1 Logo"
+        />
+      </div>
+      <div class="score">
+        <!-- Team 1 Score -->
+
+        <span class="score-value1">0</span>
+      </div>
+      <div class="team-logo">
+        <!-- Team 2 Logo -->
+        <img
+          src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
+          alt="Team 2 Logo"
+        />
+      </div>
+      <div class="score">
+        <!-- Team 2 Score -->
+
+        <span class="score-value2">0</span>
+      </div>
+      <div class="timer">
+        <!-- Timer -->
+
+        <span class="timer-value">00:00</span>
+      </div>
+      <div class="date-time" id="date-time"></div>
+      <div class="media-container">
+        <!-- Insert your GIF or video here -->
+        <img
+          class="media-content"
+          src="https://media.giphy.com/media/cYWZAIhRC3t0wMix6h/giphy.gif"
+          alt="Looping Media"
+        />
+      </div>
+    </div>
+
+    <script>
+      const team1Score = document.querySelector(".score-value1");
+      const team2Score = document.querySelector(".score-value2");
+      const timer = document.querySelector(".timer-value");
+      const startButton = document.querySelector(".start");
+      const stopButton = document.querySelector(".stop");
+      const decreaseTimeButton = document.querySelector(".decrease-time");
+      const increaseTimeButton = document.querySelector(".increase-time");
+      const dateTimeElement = document.getElementById("date-time");
+      let timerInterval;
+      let timerRunning = false;
+      let minutes = 0;
+      let seconds = 0;
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          seconds++;
+          if (seconds === 60) {
+            minutes++;
+            seconds = 0;
+          }
+          timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
+            seconds < 10 ? "0" : ""
+          }${seconds}`;
+        }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function updateDateTime() {
+        const tehranTime = new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Tehran",
+          hour: "numeric",
+          minute: "numeric",
+          weekday: "long", // Display the name of the day
+        });
+        dateTimeElement.textContent = `Tehran Time: ${tehranTime}`;
+      }
+
+      setInterval(updateDateTime, 1000); // Update Tehran time every second
+
+      startButton.addEventListener("click", () => {
+        if (!timerRunning) {
+          startTimer();
+          timerRunning = true;
+        }
+      });
+
+      stopButton.addEventListener("click", () => {
+        stopTimer();
+        timerRunning = false;
+      });
+
+      decreaseTimeButton.addEventListener("click", () => {
+        // Subtract 1 minute
+        if (minutes > 0) {
+          minutes--;
+          timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
+            seconds < 10 ? "0" : ""
+          }${seconds}`;
+        }
+      });
+
+      increaseTimeButton.addEventListener("click", () => {
+        // Add 1 minute
+        minutes++;
+        timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
+          seconds < 10 ? "0" : ""
+        }${seconds}`;
+      });
+
+      // Score Buttons for Team 1
+      const decreaseScore1Button = document.querySelector(".decrease1");
+      const increaseScore1Button = document.querySelector(".increase1");
+
+      decreaseScore1Button.addEventListener("click", () => {
+        team1Score.innerText = parseInt(team1Score.innerText) - 1;
+      });
+
+      increaseScore1Button.addEventListener("click", () => {
+        team1Score.innerText = parseInt(team1Score.innerText) + 1;
+      });
+
+      // Score Buttons for Team 2
+      const decreaseScore2Button = document.querySelector(".decrease2");
+      const increaseScore2Button = document.querySelector(".increase2");
+
+      decreaseScore2Button.addEventListener("click", () => {
+        team2Score.innerText = parseInt(team2Score.innerText) - 1;
+      });
+
+      increaseScore2Button.addEventListener("click", () => {
+        team2Score.innerText = parseInt(team2Score.innerText) + 1;
+      });
+    </script>
+  </body>
+</html>
+
+<!-- // https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png -->
+
+<!-- https://media.giphy.com/media/cYWZAIhRC3t0wMix6h/giphy.gif -->

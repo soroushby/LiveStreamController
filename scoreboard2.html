@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Glacial+Indifference"
+    />
+    <style>
+      /* Your CSS styles here */
+      body {
+        font-family: "Glacial Indifference", sans-serif;
+        /* Additional CSS styles for your font */
+      }
+    </style>
+
+    <style>
+      /* Reset some default styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Apply a background color to the entire page */
+      body {
+        background-color: #f0f0f0;
+      }
+
+      /* Style the live stream bar container */
+      .live-stream-bar {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(0.25turn, #ffc145, #b8b8d1, #5b5f97);
+        justify-content: space-evenly;
+        background-color: #ffffff;
+        height: 75px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        animation: fadeIn 2s ease;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      /* Style team logos */
+      .team-logo img {
+        width: 60px;
+        height: 60px;
+      }
+
+      /* Style score and timer containers */
+      .score,
+      .timer {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        margin: 0 5px;
+      }
+
+      /* Style score and timer buttons */
+      .score button,
+      .timer button,
+      .timer-control-button {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        margin: 0 5px;
+        transition: background-color 0.2s ease;
+      }
+
+      /* Style score and timer value */
+      .score-value,
+      .timer-value {
+        margin: 0 2px;
+        font-size: 28px;
+      }
+
+      /* Style timer controls container */
+      .timer-controls {
+        display: flex;
+        align-items: center;
+      }
+
+      /* Style media container */
+      .media-container {
+        width: 120px;
+        height: 60px;
+        background-color: #333;
+        overflow: hidden;
+        border-radius: 5px;
+      }
+
+      /* Style media content (GIF or video) */
+      .media-content {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Style start and stop buttons */
+      .start,
+      .stop {
+        background-color: #4caf50;
+        font-size: 24px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        margin: 0 10px;
+        transition: background-color 0.2s ease;
+      }
+
+      /* Hover effect for buttons */
+      .start:hover,
+      .stop:hover,
+      .score button:hover,
+      .timer button:hover,
+      .timer-control-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Keyframes for fade-in animation */
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Style for date and time */
+      .date-time {
+        display: flexbox;
+        flex-direction: column;
+        font-size: 18px;
+        margin-right: 20px;
+      }
+
+      .soroush {
+        display: flex;
+        width: 100%;
+      }
+
+      .increase1 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+      .decrease1 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+
+      .increase2 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+      .decrease2 {
+        width: 100px;
+        background-color: rgba(233, 39, 49, 0.842);
+      }
+
+      /* Style for player lineup */
+      .player-lineup {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        width: 7%;
+      }
+
+      .player-lineup-container {
+        display: flex;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .player-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        max-height: 4rem;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: transparent; /* Make the background transparent */
+      }
+
+      .player-list p {
+        font-size: 14px;
+        padding: 3px 5px;
+        border-radius: 3px;
+        font-weight: 700;
+        color: white;
+      }
+
+      /* Style for color picker container */
+      .color-picker-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .color-picker {
+        width: 100px;
+        margin: 5px;
+        padding: 5px;
+      }
+
+      .change-bg-button {
+        margin: 5px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+      }
+
+      .change-bg-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Style for file input container */
+      .file-input-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .file-input {
+        margin: 5px;
+      }
+
+      .change-logo-button {
+        margin: 5px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+      }
+
+      .change-logo-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="soroush">
+      <button class="decrease1">-</button>
+      <button class="increase1">+</button>
+      <button class="start">Start</button>
+      <button class="stop">Stop</button>
+      <button class="timer-control-button decrease-time">-</button>
+      <button class="timer-control-button increase-time">+</button>
+      <button class="decrease2">-</button>
+      <button class="increase2">+</button>
+      <button id="addPlayer1">Add Player</button>
+      <button id="addPlayer2">Add Player</button>
+      <div class="color-picker-container">
+        <input
+          type="color"
+          class="color-picker"
+          id="team1ColorPicker"
+          value="#007bff"
+        />
+        <button class="change-bg-button" id="changeBg1Button">
+          Change Background
+        </button>
+      </div>
+      <div class="color-picker-container">
+        <input
+          type="color"
+          class="color-picker"
+          id="team2ColorPicker"
+          value="#007bff"
+        />
+        <button class="change-bg-button" id="changeBg2Button">
+          Change Background
+        </button>
+      </div>
+      <div class="file-input-container">
+        <input
+          type="file"
+          class="file-input"
+          id="team1LogoInput"
+          accept="image/*"
+        />
+        <button class="change-logo-button" id="changeTeam1LogoButton">
+          Change Team 1 Logo
+        </button>
+      </div>
+      <div class="file-input-container">
+        <input
+          type="file"
+          class="file-input"
+          id="team2LogoInput"
+          accept="image/*"
+        />
+        <button class="change-logo-button" id="changeTeam2LogoButton">
+          Change Team 2 Logo
+        </button>
+      </div>
+      <div class="file-input-container">
+        <input
+          type="file"
+          class="file-input"
+          id="changeMediaInput"
+          accept="image/gif, video/*"
+        />
+        <button class="change-logo-button" id="changeMediaButton">
+          Change Media
+        </button>
+      </div>
+    </div>
+
+    <div class="live-stream-bar">
+      <div class="team-logo">
+        <!-- Team 1 Logo -->
+        <img
+          id="team1Logo"
+          src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
+          alt="Team 1 Logo"
+        />
+      </div>
+      <div class="score">
+        <!-- Team 1 Score -->
+        <span class="score-value1">0</span>
+      </div>
+      <div class="score">
+        <!-- Team 2 Score -->
+        <span class="score-value2">0</span>
+      </div>
+      <div class="team-logo">
+        <!-- Team 2 Logo -->
+        <img
+          id="team2Logo"
+          src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
+          alt="Team 2 Logo"
+        />
+      </div>
+
+      <div class="timer">
+        <!-- Timer -->
+        <span class="timer-value">00:00</span>
+      </div>
+      <div class="date-time" id="date-time"></div>
+      <div class="media-container">
+        <!-- Insert your GIF or video here -->
+        <img
+          class="media-content"
+          src="../Downloads/IMG_0458.gif"
+          alt="Looping Media"
+          id="mediaContent"
+        />
+      </div>
+
+      <!-- Player Lineup -->
+      <div class="player-lineup">
+        <div class="player-lineup-container">
+          <div class="player-list" id="playerList1">
+            <!-- Player names will be displayed here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="player-lineup">
+        <div class="player-lineup-container">
+          <div class="player-list" id="playerList2">
+            <!-- Player names will be displayed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const team1Score = document.querySelector(".score-value1");
+      const team2Score = document.querySelector(".score-value2");
+      const timer = document.querySelector(".timer-value");
+      const startButton = document.querySelector(".start");
+      const stopButton = document.querySelector(".stop");
+      const decreaseTimeButton = document.querySelector(".decrease-time");
+      const increaseTimeButton = document.querySelector(".increase-time");
+      const dateTimeElement = document.getElementById("date-time");
+      let timerInterval;
+      let timerRunning = false;
+      let minutes = 0;
+      let seconds = 0;
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          seconds++;
+          if (seconds === 60) {
+            minutes++;
+            seconds = 0;
+          }
+          timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
+            seconds < 10 ? "0" : ""
+          }${seconds}`;
+        }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function updateDateTime() {
+        const tehranTime = new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Tehran",
+          hour: "numeric",
+          minute: "numeric",
+          weekday: "short",
+        });
+        dateTimeElement.textContent = `${tehranTime}`;
+      }
+
+      setInterval(updateDateTime, 1000);
+
+      startButton.addEventListener("click", () => {
+        if (!timerRunning) {
+          startTimer();
+          timerRunning = true;
+        }
+      });
+
+      stopButton.addEventListener("click", () => {
+        stopTimer();
+        timerRunning = false;
+      });
+
+      decreaseTimeButton.addEventListener("click", () => {
+        if (minutes > 0) {
+          minutes--;
+          timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
+            seconds < 10 ? "0" : ""
+          }${seconds}`;
+        }
+      });
+
+      increaseTimeButton.addEventListener("click", () => {
+        minutes++;
+        timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
+          seconds < 10 ? "0" : ""
+        }${seconds}`;
+      });
+
+      const decreaseScore1Button = document.querySelector(".decrease1");
+      const increaseScore1Button = document.querySelector(".increase1");
+
+      decreaseScore1Button.addEventListener("click", () => {
+        team1Score.innerText = parseInt(team1Score.innerText) - 1;
+      });
+
+      increaseScore1Button.addEventListener("click", () => {
+        team1Score.innerText = parseInt(team1Score.innerText) + 1;
+      });
+
+      const decreaseScore2Button = document.querySelector(".decrease2");
+      const increaseScore2Button = document.querySelector(".increase2");
+
+      decreaseScore2Button.addEventListener("click", () => {
+        team2Score.innerText = parseInt(team2Score.innerText) - 1;
+      });
+
+      increaseScore2Button.addEventListener("click", () => {
+        team2Score.innerText = parseInt(team2Score.innerText) + 1;
+      });
+
+      // Player Lineup
+      const addPlayer1Button = document.getElementById("addPlayer1");
+      const playerList1 = document.getElementById("playerList1");
+      const team1ColorPicker = document.getElementById("team1ColorPicker");
+      const changeBg1Button = document.getElementById("changeBg1Button");
+
+      addPlayer1Button.addEventListener("click", () => {
+        const playerName = prompt("Enter player name for Team 1:");
+        if (playerName) {
+          const playerItem = document.createElement("p");
+          playerItem.textContent = playerName;
+          playerItem.style.backgroundColor = `${team1ColorPicker.value}33`; // Adding 33 for 20% opacity
+          playerList1.appendChild(playerItem);
+        }
+      });
+
+      changeBg1Button.addEventListener("click", () => {
+        const selectedColor = team1ColorPicker.value;
+        playerList1.style.backgroundColor = selectedColor;
+      });
+
+      const addPlayer2Button = document.getElementById("addPlayer2");
+      const playerList2 = document.getElementById("playerList2");
+      const team2ColorPicker = document.getElementById("team2ColorPicker");
+      const changeBg2Button = document.getElementById("changeBg2Button");
+
+      addPlayer2Button.addEventListener("click", () => {
+        const playerName = prompt("Enter player name for Team 2:");
+        if (playerName) {
+          const playerItem = document.createElement("p");
+          playerItem.textContent = playerName;
+          playerItem.style.backgroundColor = `${team2ColorPicker.value}33`; // Adding 33 for 20% opacity
+          playerList2.appendChild(playerItem);
+        }
+      });
+
+      changeBg2Button.addEventListener("click", () => {
+        const selectedColor = team2ColorPicker.value;
+        playerList2.style.backgroundColor = selectedColor;
+      });
+
+      // Logo and Media
+      const team1LogoInput = document.getElementById("team1LogoInput");
+      const team2LogoInput = document.getElementById("team2LogoInput");
+      const changeTeam1LogoButton = document.getElementById(
+        "changeTeam1LogoButton"
+      );
+      const changeTeam2LogoButton = document.getElementById(
+        "changeTeam2LogoButton"
+      );
+      const changeMediaInput = document.getElementById("changeMediaInput");
+      const mediaContent = document.getElementById("mediaContent");
+      const changeMediaButton = document.getElementById("changeMediaButton");
+
+      changeTeam1LogoButton.addEventListener("click", () => {
+        team1LogoInput.click();
+      });
+
+      team1LogoInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const imageUrl = e.target.result;
+            document.getElementById("team1Logo").src = imageUrl;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      changeTeam2LogoButton.addEventListener("click", () => {
+        team2LogoInput.click();
+      });
+
+      team2LogoInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const imageUrl = e.target.result;
+            document.getElementById("team2Logo").src = imageUrl;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      changeMediaButton.addEventListener("click", () => {
+        changeMediaInput.click();
+      });
+
+      changeMediaInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const fileType = file.type;
+          if (fileType === "image/gif" || fileType.startsWith("video/")) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const mediaUrl = e.target.result;
+              mediaContent.src = mediaUrl;
+            };
+            reader.readAsDataURL(file);
+          } else {
+            alert("Please select a valid GIF or video file.");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
