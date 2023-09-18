@@ -30,12 +30,13 @@
       .live-stream-bar {
         display: flex;
         align-items: center;
-        background: linear-gradient(0.25turn, #ffc145, #b8b8d1, #5b5f97);
-        justify-content: space-evenly;
+        background: linear-gradient(0.25turn, #D9DBF1, #D0CDD7);
+        justify-content: space-around;
+
         background-color: #ffffff;
         height: 75px;
         border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); */
         animation: fadeIn 2s ease;
         position: fixed;
         bottom: 0;
@@ -46,6 +47,13 @@
       .team-logo img {
         width: 60px;
         height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        max-width: 100%; /* Ensure the image fits within the container */
+        max-height: 100%; /* Ensure the image fits within the container */
+        object-fit: contain;
       }
 
       /* Style score and timer containers */
@@ -54,7 +62,6 @@
         display: flex;
         align-items: center;
         font-size: 24px;
-        margin: 0 5px;
       }
 
       /* Style score and timer buttons */
@@ -145,7 +152,9 @@
 
       .soroush {
         display: flex;
+  flex-wrap: wrap;
         width: 100%;
+        
       }
 
       .increase1 {
@@ -171,7 +180,6 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        width: 7%;
       }
 
       .player-lineup-container {
@@ -186,7 +194,7 @@
         align-items: center;
         max-height: 4rem;
         padding: 10px;
-        border: 1px solid #ccc;
+
         border-radius: 5px;
         background-color: transparent; /* Make the background transparent */
       }
@@ -254,6 +262,38 @@
       .change-logo-button:hover {
         background-color: #0056b3;
       }
+
+      .score-board {
+        display: flex;
+        width: 20%;
+        justify-content: space-around;
+      }
+
+      /* Additional styles for donation progress bar and top donators */
+      .donation-progress-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 10px;
+      }
+
+      .donation-progress-bar {
+        width: 100%;
+        height: 20px;
+        margin-top: 5px;
+      }
+
+      .top-donators {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .top-donators h3,
+      .top-donators p {
+        margin: 5px;
+      }
     </style>
   </head>
   <body>
@@ -266,30 +306,13 @@
       <button class="timer-control-button increase-time">+</button>
       <button class="decrease2">-</button>
       <button class="increase2">+</button>
-      <button id="addPlayer1">Add Player</button>
-      <button id="addPlayer2">Add Player</button>
-      <div class="color-picker-container">
-        <input
-          type="color"
-          class="color-picker"
-          id="team1ColorPicker"
-          value="#007bff"
-        />
-        <button class="change-bg-button" id="changeBg1Button">
-          Change Background
-        </button>
-      </div>
-      <div class="color-picker-container">
-        <input
-          type="color"
-          class="color-picker"
-          id="team2ColorPicker"
-          value="#007bff"
-        />
-        <button class="change-bg-button" id="changeBg2Button">
-          Change Background
-        </button>
-      </div>
+      <input
+        type="number"
+        id="donationInput"
+        placeholder="Enter donation amount"
+      />
+      <button id="updateDonation">Update Donation</button>
+
       <div class="file-input-container">
         <input
           type="file"
@@ -323,34 +346,38 @@
           Change Media
         </button>
       </div>
+
+      <input type="text" id="topDonatorNameInput" placeholder="Enter top donator name" />
+<button id="updateTopDonatorName">Update Top Donator</button>
     </div>
 
     <div class="live-stream-bar">
-      <div class="team-logo">
-        <!-- Team 1 Logo -->
-        <img
-          id="team1Logo"
-          src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
-          alt="Team 1 Logo"
-        />
+      <div class="score-board">
+        <div class="team-logo">
+          <!-- Team 1 Logo -->
+          <img
+            id="team1Logo"
+            src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
+            alt="Team 1 Logo"
+          />
+        </div>
+        <div class="score">
+          <!-- Team 1 Score -->
+          <span class="score-value1">0</span>
+        </div>
+        <div class="score">
+          <!-- Team 2 Score -->
+          <span class="score-value2">0</span>
+        </div>
+        <div class="team-logo">
+          <!-- Team 2 Logo -->
+          <img
+            id="team2Logo"
+            src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
+            alt="Team 2 Logo"
+          />
+        </div>
       </div>
-      <div class="score">
-        <!-- Team 1 Score -->
-        <span class="score-value1">0</span>
-      </div>
-      <div class="score">
-        <!-- Team 2 Score -->
-        <span class="score-value2">0</span>
-      </div>
-      <div class="team-logo">
-        <!-- Team 2 Logo -->
-        <img
-          id="team2Logo"
-          src="https://logos-world.net/wp-content/uploads/2020/04/Barcelona-Logo.png"
-          alt="Team 2 Logo"
-        />
-      </div>
-
       <div class="timer">
         <!-- Timer -->
         <span class="timer-value">00:00</span>
@@ -367,222 +394,136 @@
       </div>
 
       <!-- Player Lineup -->
-      <div class="player-lineup">
-        <div class="player-lineup-container">
-          <div class="player-list" id="playerList1">
-            <!-- Player names will be displayed here -->
-          </div>
-        </div>
+      <div class="donation-progress-container">
+        <h3>Donations</h3>
+        <progress class="donation-progress-bar" id="donationProgressBar" max="20000000" value="0"></progress>
       </div>
-
-      <div class="player-lineup">
-        <div class="player-lineup-container">
-          <div class="player-list" id="playerList2">
-            <!-- Player names will be displayed here -->
-          </div>
-        </div>
+      <div class="top-donators">
+        <h3>Top Donator</h3>
+        <p id="topDonator1"></p>
+        
       </div>
-    </div>
 
     <script>
-      const team1Score = document.querySelector(".score-value1");
-      const team2Score = document.querySelector(".score-value2");
-      const timer = document.querySelector(".timer-value");
-      const startButton = document.querySelector(".start");
-      const stopButton = document.querySelector(".stop");
-      const decreaseTimeButton = document.querySelector(".decrease-time");
-      const increaseTimeButton = document.querySelector(".increase-time");
-      const dateTimeElement = document.getElementById("date-time");
-      let timerInterval;
-      let timerRunning = false;
-      let minutes = 0;
-      let seconds = 0;
+        // Initialize variables
+let totalDonationAmount = 0;
+const donationGoal = 20000000; // Set your donation goal here in Toman
 
-      function startTimer() {
-        timerInterval = setInterval(() => {
-          seconds++;
-          if (seconds === 60) {
-            minutes++;
-            seconds = 0;
-          }
-          timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
-            seconds < 10 ? "0" : ""
-          }${seconds}`;
-        }, 1000);
-      }
+const team1Score = document.querySelector(".score-value1");
+const team2Score = document.querySelector(".score-value2");
+const timer = document.querySelector(".timer-value");
+const startButton = document.querySelector(".start");
+const stopButton = document.querySelector(".stop");
+const decreaseTimeButton = document.querySelector(".decrease-time");
+const increaseTimeButton = document.querySelector(".increase-time");
+const dateTimeElement = document.getElementById("date-time");
 
-      function stopTimer() {
-        clearInterval(timerInterval);
-      }
+const donationInput = document.getElementById("donationInput");
+const updateDonationButton = document.getElementById("updateDonation");
+const donationProgressTitle = document.querySelector(".donation-progress-container h3");
+const donationProgressBar = document.getElementById("donationProgressBar");
 
-      function updateDateTime() {
-        const tehranTime = new Date().toLocaleString("en-US", {
-          timeZone: "Asia/Tehran",
-          hour: "numeric",
-          minute: "numeric",
-          weekday: "short",
-        });
-        dateTimeElement.textContent = `${tehranTime}`;
-      }
+let timerInterval;
+let timerRunning = false;
+let minutes = 0;
+let seconds = 0;
 
-      setInterval(updateDateTime, 1000);
+// Function to start the timer
+function startTimer() {
+  timerInterval = setInterval(() => {
+    seconds++;
+    if (seconds === 60) {
+      minutes++;
+      seconds = 0;
+    }
+    timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  }, 1000);
+}
 
-      startButton.addEventListener("click", () => {
-        if (!timerRunning) {
-          startTimer();
-          timerRunning = true;
-        }
-      });
+// Function to stop the timer
+function stopTimer() {
+  clearInterval(timerInterval);
+}
 
-      stopButton.addEventListener("click", () => {
-        stopTimer();
-        timerRunning = false;
-      });
+// Function to update the date and time
+function updateDateTime() {
+  const tehranTime = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Tehran",
+    hour: "numeric",
+    minute: "numeric",
+    weekday: "short",
+  });
+  dateTimeElement.textContent = `${tehranTime}`;
+}
 
-      decreaseTimeButton.addEventListener("click", () => {
-        if (minutes > 0) {
-          minutes--;
-          timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
-            seconds < 10 ? "0" : ""
-          }${seconds}`;
-        }
-      });
+// Function to update the color of the progress bar
+function updateProgressBarColor() {
+  const percentage = (totalDonationAmount / donationGoal) * 100;
+  if (percentage < 25) {
+    donationProgressBar.style.backgroundColor = "red";
+  } else if (percentage < 50) {
+    donationProgressBar.style.backgroundColor = "orange";
+  } else if (percentage < 75) {
+    donationProgressBar.style.backgroundColor = "yellow";
+  } else {
+    donationProgressBar.style.backgroundColor = "green";
+  }
+}
 
-      increaseTimeButton.addEventListener("click", () => {
-        minutes++;
-        timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${
-          seconds < 10 ? "0" : ""
-        }${seconds}`;
-      });
+// Event listeners
+startButton.addEventListener("click", () => {
+  if (!timerRunning) {
+    startTimer();
+    timerRunning = true;
+  }
+});
 
-      const decreaseScore1Button = document.querySelector(".decrease1");
-      const increaseScore1Button = document.querySelector(".increase1");
+stopButton.addEventListener("click", () => {
+  stopTimer();
+  timerRunning = false;
+});
 
-      decreaseScore1Button.addEventListener("click", () => {
-        team1Score.innerText = parseInt(team1Score.innerText) - 1;
-      });
+decreaseTimeButton.addEventListener("click", () => {
+  if (minutes > 0) {
+    minutes--;
+    timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  }
+});
 
-      increaseScore1Button.addEventListener("click", () => {
-        team1Score.innerText = parseInt(team1Score.innerText) + 1;
-      });
+increaseTimeButton.addEventListener("click", () => {
+  minutes++;
+  timer.innerText = `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+});
 
-      const decreaseScore2Button = document.querySelector(".decrease2");
-      const increaseScore2Button = document.querySelector(".increase2");
+updateDonationButton.addEventListener("click", () => {
+  const newDonation = parseFloat(donationInput.value);
+  if (!isNaN(newDonation) && newDonation > 0) {
+    totalDonationAmount += newDonation;
+    donationProgressBar.value = totalDonationAmount;
+    updateProgressBarColor();
+    donationProgressTitle.textContent = `Donations: ${totalDonationAmount.toLocaleString()} T`;
+  } else {
+    alert("Please enter a valid donation amount.");
+  }
+});
 
-      decreaseScore2Button.addEventListener("click", () => {
-        team2Score.innerText = parseInt(team2Score.innerText) - 1;
-      });
+// Update the date and time every second
+setInterval(updateDateTime, 1000);
 
-      increaseScore2Button.addEventListener("click", () => {
-        team2Score.innerText = parseInt(team2Score.innerText) + 1;
-      });
 
-      // Player Lineup
-      const addPlayer1Button = document.getElementById("addPlayer1");
-      const playerList1 = document.getElementById("playerList1");
-      const team1ColorPicker = document.getElementById("team1ColorPicker");
-      const changeBg1Button = document.getElementById("changeBg1Button");
+const topDonatorNameInput = document.getElementById("topDonatorNameInput");
+const updateTopDonatorNameButton = document.getElementById("updateTopDonatorName");
+const topDonator1 = document.getElementById("topDonator1");
 
-      addPlayer1Button.addEventListener("click", () => {
-        const playerName = prompt("Enter player name for Team 1:");
-        if (playerName) {
-          const playerItem = document.createElement("p");
-          playerItem.textContent = playerName;
-          playerItem.style.backgroundColor = `${team1ColorPicker.value}33`; // Adding 33 for 20% opacity
-          playerList1.appendChild(playerItem);
-        }
-      });
+updateTopDonatorNameButton.addEventListener("click", () => {
+  const newTopDonatorName = topDonatorNameInput.value.trim();
+  if (newTopDonatorName) {
+    topDonator1.textContent = newTopDonatorName;
+  } else {
+    alert("Please enter a valid name for the top donator.");
+  }
+});
 
-      changeBg1Button.addEventListener("click", () => {
-        const selectedColor = team1ColorPicker.value;
-        playerList1.style.backgroundColor = selectedColor;
-      });
-
-      const addPlayer2Button = document.getElementById("addPlayer2");
-      const playerList2 = document.getElementById("playerList2");
-      const team2ColorPicker = document.getElementById("team2ColorPicker");
-      const changeBg2Button = document.getElementById("changeBg2Button");
-
-      addPlayer2Button.addEventListener("click", () => {
-        const playerName = prompt("Enter player name for Team 2:");
-        if (playerName) {
-          const playerItem = document.createElement("p");
-          playerItem.textContent = playerName;
-          playerItem.style.backgroundColor = `${team2ColorPicker.value}33`; // Adding 33 for 20% opacity
-          playerList2.appendChild(playerItem);
-        }
-      });
-
-      changeBg2Button.addEventListener("click", () => {
-        const selectedColor = team2ColorPicker.value;
-        playerList2.style.backgroundColor = selectedColor;
-      });
-
-      // Logo and Media
-      const team1LogoInput = document.getElementById("team1LogoInput");
-      const team2LogoInput = document.getElementById("team2LogoInput");
-      const changeTeam1LogoButton = document.getElementById(
-        "changeTeam1LogoButton"
-      );
-      const changeTeam2LogoButton = document.getElementById(
-        "changeTeam2LogoButton"
-      );
-      const changeMediaInput = document.getElementById("changeMediaInput");
-      const mediaContent = document.getElementById("mediaContent");
-      const changeMediaButton = document.getElementById("changeMediaButton");
-
-      changeTeam1LogoButton.addEventListener("click", () => {
-        team1LogoInput.click();
-      });
-
-      team1LogoInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const imageUrl = e.target.result;
-            document.getElementById("team1Logo").src = imageUrl;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      changeTeam2LogoButton.addEventListener("click", () => {
-        team2LogoInput.click();
-      });
-
-      team2LogoInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const imageUrl = e.target.result;
-            document.getElementById("team2Logo").src = imageUrl;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      changeMediaButton.addEventListener("click", () => {
-        changeMediaInput.click();
-      });
-
-      changeMediaInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const fileType = file.type;
-          if (fileType === "image/gif" || fileType.startsWith("video/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const mediaUrl = e.target.result;
-              mediaContent.src = mediaUrl;
-            };
-            reader.readAsDataURL(file);
-          } else {
-            alert("Please select a valid GIF or video file.");
-          }
-        }
-      });
     </script>
   </body>
 </html>

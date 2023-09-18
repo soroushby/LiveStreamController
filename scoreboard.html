@@ -30,7 +30,8 @@
       .live-stream-bar {
         display: flex;
         align-items: center;
-        justify-content: space-evenly; /* Changed to space-between */
+        /* justify-content: space-evenly; */
+        justify-content: space-around;
         background-color: #ffffff;
         height: 80px;
         padding: 10px;
@@ -258,6 +259,9 @@
           hour: "numeric",
           minute: "numeric",
           weekday: "long", // Display the name of the day
+          day: "numeric", // Display the day of the month
+          month: "long", // Display the full name of the month
+          year: "numeric",
         });
         dateTimeElement.textContent = `Tehran Time: ${tehranTime}`;
       }
